@@ -11,11 +11,15 @@ const indexRouter = require("./routes/index");
 const tvRouter = require("./routes/tv");
 
 const mongoose = require("mongoose");
-mongoose.connect(`mongodb://localhost:27017/tv_${process.env.NODE_ENV}`, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: true
-});
+// mongoose.connect(`mongodb://localhost:27017/tv_${process.env.NODE_ENV}`, {
+mongoose.connect(
+  `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@hacktiv-ra2tp.mongodb.net/tv_${process.env.NODE_ENV}?retryWrites=true&w=majority`,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: true
+  }
+);
 
 const app = express();
 
