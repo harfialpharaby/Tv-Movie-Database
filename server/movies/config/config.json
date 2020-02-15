@@ -1,0 +1,16 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "movies_development",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "eeujjyfbvhobpe",
+    "password": "ca079eaddcc50d912e936d1ad56a2533cd487b5f10e65ac94e74d9faa97a6e42",
+    "database": "dlmk3uq4k1eum",
+    "host": "ec2-35-172-85-250.compute-1.amazonaws.com",
+    "dialect": "postgres"
+  }
+}
