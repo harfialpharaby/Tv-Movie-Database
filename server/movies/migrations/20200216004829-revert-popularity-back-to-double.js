@@ -6,7 +6,6 @@ module.exports = {
       type: Sequelize.DOUBLE
     });
   },
-
   down: (queryInterface, Sequelize) => {
     return queryInterface.changeColumn("Movies", "popularity", {
       type: Sequelize.INTEGER
