@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       title: { type: DataTypes.STRING },
       overview: { type: DataTypes.STRING },
       posterPath: { type: DataTypes.STRING },
-      popularity: { type: DataTypes.INTEGER },
+      popularity: { type: DataTypes.DOUBLE },
       tags: { type: DataTypes.ARRAY(DataTypes.STRING) }
     },
     {}

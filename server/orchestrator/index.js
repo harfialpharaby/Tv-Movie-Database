@@ -5,6 +5,7 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
 const { ApolloServer, gql, makeExecutableSchema } = require("apollo-server");
 const movies = require("./schemas/movies");
 const tv = require("./schemas/tv");
+const externalMovie = require("./schemas/externalMovies");
 const typeDefs = gql`
   type Query
   type Mutation
@@ -21,8 +22,8 @@ const typeDefs = gql`
 `;
 
 const schema = makeExecutableSchema({
-  typeDefs: [typeDefs, movies.typeDefs, tv.typeDefs],
-  resolvers: [movies.resolvers, tv.resolvers]
+  typeDefs: [typeDefs, movies.typeDefs, tv.typeDefs, externalMovie.typeDefs],
+  resolvers: [movies.resolvers, tv.resolvers, externalMovie.resolvers]
 });
 
 const server = new ApolloServer({ schema });

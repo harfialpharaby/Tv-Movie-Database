@@ -7,7 +7,7 @@ const tvData = `
   title: String
   overview: String
   posterPath: String
-  popularity: Int
+  popularity: Float
   tags: [String]
 `;
 
