@@ -7,7 +7,7 @@ const MovieData = `
   title: String
   overview: String
   posterPath: String
-  popularity: Float
+  popularity: Int
   tags: [String]
 `;
 

@@ -13,7 +13,7 @@ module.exports = {
             "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dicta veniam ad quibusdam, autem debitis ipsa fugiat! Suscipit numquam reiciendis necessitatibus.",
           posterPath:
             "https://cdn.myanimelist.net/images/anime/1238/103624l.jpg",
-          popularity: "8.9",
+          popularity: 173972,
           tags: ["action", "demon", "adventure"],
           createdAt: new Date(),
           updatedAt: new Date()
@@ -24,7 +24,7 @@ module.exports = {
           overview:
             "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dicta veniam ad quibusdam, autem debitis ipsa fugiat! Suscipit numquam reiciendis necessitatibus.",
           posterPath: "https://cdn.myanimelist.net/images/anime/6/79597l.jpg",
-          popularity: "8.88",
+          popularity: 273881,
           tags: ["adventure", "fantasy", "horror", "animation"],
           createdAt: new Date(),
           updatedAt: new Date()
