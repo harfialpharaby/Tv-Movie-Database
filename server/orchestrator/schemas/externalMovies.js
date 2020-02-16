@@ -3,7 +3,7 @@ const axios = require("axios");
 const Redis = require("ioredis");
 const redis = new Redis();
 
-const externalMovieData = `
+const eMovieData = `
   title: String
   original_title: String
   overview: String
@@ -13,56 +13,90 @@ const externalMovieData = `
 
 const typeDefs = gql`
   extend type Query {
-    nowPlaying: [ExternalMovie]
-    popular: [ExternalMovie]
-    externalMovie(id: String, ${externalMovieData}): ExternalMovie
+    nowPlaying: [EMovie]
+    popular: [EMovie]
+    eMovie(id: String, ${eMovieData}): EMovie
   }
 
-  type ExternalMovie {
+  type EMovie {
     id: String
-    ${externalMovieData}
+    ${eMovieData}
+    tags: [Tag]
+  }
+
+  type Tag {
+    id: Int
+    name: String
   }
 `;
 
 const resolvers = {
   Query: {
     nowPlaying: async () => {
-      const { data } = await axios.get(
-        `https://api.themoviedb.org/3/movie/popular?api_key=9a93202bb0718ae530a1273f3b382e2f&page=1`
-      );
-      console.log(data.results[0].popularity % 1 === 0);
+      const cachedNowPlaying = await redis.hvals("nowPlaying");
+      if (cachedNowPlaying.length) {
+        return cachedNowPlaying.map(JSON.parse);
+      }
 
+      const { data } = await axios.get(
+        `https://api.themoviedb.org/3/movie/now_playing?api_key=${process.env.API_KEY}&page=1`
+      );
+      const eMovies = data.results.reduce((acc, eMovie) => {
+        acc.push(`eMovie:${eMovie.id}`, JSON.stringify(eMovie));
+        return acc;
+      }, []);
+      redis.hset("nowPlaying", ...eMovies);
+      redis.expire("nowPlaying", 3600);
       return data.results;
-      //   const cachedMovies = await redis.hvals("movies");
-      //   if (cachedMovies.length) {
-      //     return cachedMovies.map(JSON.parse);
-      //   }
-
-      //   const { data } = await axios.get(`${process.env.MOVIES_API}/movies`);
-      //   const movies = data.reduce((acc, movie) => {
-      //     acc.push(`movie:${movie.id}`, JSON.stringify(movie));
-      //     return acc;
-      //   }, []);
-      //   redis.hset("movies", ...movies);
-      //   redis.expire("movies", 3600);
-      //   return data;
     },
-    externalMovie: async (parent, args) => {
-      const { id } = args;
-
-      const cachedSelectedMovie = await redis.hget("movies", `movie:${id}`);
-      if (cachedSelectedMovie) {
-        return JSON.parse(cachedSelectedMovie);
+    popular: async (parent, args) => {
+      const cachedPopular = await redis.hvals("popular");
+      if (cachedPopular.length) {
+        return cachedPopular.map(JSON.parse);
       }
 
       const { data } = await axios.get(
-        `${process.env.MOVIES_API}/movies/${args.id}`
+        `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.API_KEY}&page=1`
       );
-      if (data) {
-        redis.hset("movies", `movie:${id}`, JSON.stringify(data));
-        redis.expire("movies", 3600);
+      const eMovies = data.results.reduce((acc, eMovie) => {
+        acc.push(`eMovie:${eMovie.id}`, JSON.stringify(eMovie));
+        return acc;
+      }, []);
+      redis.hset("popular", ...eMovies);
+      redis.expire("popular", 3600);
+      return data.results;
+    }
+  },
+  EMovie: {
+    tags: async parent => {
+      let tags = null;
+      const { genre_ids } = parent;
+      const cachedTags = await redis.hvals("tags");
+      if (cachedTags.length) {
+        const tags = cachedTags.filter(strTag => {
+          const { id } = JSON.parse(strTag);
+          return genre_ids.includes(id);
+        });
+        return tags.map(JSON.parse);
       }
-      return data;
+
+      const { data } = await axios.get(
+        `https://api.themoviedb.org/3/genre/movie/list?api_key=${process.env.API_KEY}`
+      );
+      tags = data.genres.reduce(
+        (acc, genre) => {
+          acc.cache.push(`tag:${genre.id}`, JSON.stringify(genre));
+          if (genre_ids.includes(genre.id)) {
+            acc.current.push(genre);
+          }
+          return acc;
+        },
+        { cache: [], current: [] }
+      );
+      redis.hset("tags", ...tags.cache);
+      redis.expire("tags", 86400);
+
+      return tags.current;
     }
   }
 };
