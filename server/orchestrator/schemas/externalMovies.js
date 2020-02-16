@@ -13,8 +13,8 @@ const eMovieData = `
 
 const typeDefs = gql`
   extend type Query {
-    nowPlaying: [EMovie]
-    popular: [EMovie]
+    nowPlaying (page: Int): [EMovie]
+    popular (page: Int): [EMovie]
     eMovie(id: String, ${eMovieData}): EMovie
   }
 
@@ -32,38 +32,40 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    nowPlaying: async () => {
+    nowPlaying: async (parent, args) => {
+      const { page } = args;
       const cachedNowPlaying = await redis.hvals("nowPlaying");
-      if (cachedNowPlaying.length) {
+      if (cachedNowPlaying.length >= 20 * page) {
         return cachedNowPlaying.map(JSON.parse);
       }
 
       const { data } = await axios.get(
-        `https://api.themoviedb.org/3/movie/now_playing?api_key=${process.env.API_KEY}&page=1`
+        `https://api.themoviedb.org/3/movie/now_playing?api_key=${process.env.API_KEY}&page=${page}`
       );
       const eMovies = data.results.reduce((acc, eMovie) => {
         acc.push(`eMovie:${eMovie.id}`, JSON.stringify(eMovie));
         return acc;
       }, []);
       redis.hset("nowPlaying", ...eMovies);
-      redis.expire("nowPlaying", 3600);
+      redis.expire("nowPlaying", 86400);
       return data.results;
     },
     popular: async (parent, args) => {
+      const { page } = args;
       const cachedPopular = await redis.hvals("popular");
-      if (cachedPopular.length) {
+      if (cachedPopular.length >= 20 * page) {
         return cachedPopular.map(JSON.parse);
       }
 
       const { data } = await axios.get(
-        `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.API_KEY}&page=1`
+        `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.API_KEY}&page=${page}`
       );
       const eMovies = data.results.reduce((acc, eMovie) => {
         acc.push(`eMovie:${eMovie.id}`, JSON.stringify(eMovie));
         return acc;
       }, []);
       redis.hset("popular", ...eMovies);
-      redis.expire("popular", 3600);
+      redis.expire("popular", 86400);
       return data.results;
     }
   },
