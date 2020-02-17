@@ -1,29 +1,55 @@
-import React, { useEffect } from "react";
-import { View, Text, Image } from "react-native";
-import { EvilIcons, Feather } from "@expo/vector-icons";
+import React, { Component } from "react";
+import {
+  View,
+  Text,
+  Image,
+  ImageBackground,
+  TouchableOpacity
+} from "react-native";
+import { EvilIcons, Feather, Entypo } from "@expo/vector-icons";
 
-export default function MovieCard(props) {
-  const { item, index } = props;
+export default class MovieCard extends Component {
+  shouldComponentUpdate() {
+    return false;
+  }
 
-  return (
-    <View
-      style={{
-        height: "95%",
-        width: "100%"
-      }}
-    >
+  render() {
+    const { item, poster } = this.props;
+
+    return (
       <View
         style={{
-          flex: 1,
-          flexDirection: "row"
+          flexDirection: "row",
+          height: "95%",
+          width: "100%"
         }}
       >
-        <Image
-          source={{
-            uri: `https://image.tmdb.org/t/p/original${item.poster_path}`
-          }}
-          style={{ flex: 0.3 }}
-        />
+        <ImageBackground
+          source={{ uri: poster }}
+          style={{ flex: 0.3, height: 135 }}
+          resizeMethod="scale"
+        >
+          <View style={{ flex: 1 }}>
+            <View
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: 40,
+                height: 50,
+                opacity: 0.8,
+                justifyContent: "center",
+                alignItems: "center",
+                borderBottomRightRadius: 15,
+                backgroundColor: "black"
+              }}
+            >
+              <TouchableOpacity onPress={() => console.log(item.id)}>
+                <Entypo name="plus" size={30} color="white"></Entypo>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ImageBackground>
         <View style={{ flex: 0.7 }}>
           <View
             style={{
@@ -52,9 +78,7 @@ export default function MovieCard(props) {
               >
                 {item.title}{" "}
                 {item.original_title !== item.title ? (
-                  <Text style={{ fontFamily: "sans-serif-thin", opacity: 0.7 }}>
-                    ({item.original_title})
-                  </Text>
+                  <Text style={{ color: "grey" }}>({item.original_title})</Text>
                 ) : null}
               </Text>
             </View>
@@ -73,7 +97,7 @@ export default function MovieCard(props) {
                   fontFamily: "sans-serif-thin"
                 }}
               >
-                271.983
+                {item.popularity}
               </Text>
             </View>
           </View>
@@ -95,6 +119,6 @@ export default function MovieCard(props) {
           </View>
         </View>
       </View>
-    </View>
-  );
+    );
+  }
 }

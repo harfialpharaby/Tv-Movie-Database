@@ -25,6 +25,7 @@ const query = gql`
       poster_path
       popularity
       tags {
+        id
         name
       }
     }
@@ -37,20 +38,21 @@ class MovieScreen extends Component {
     this.state = {
       movies: [],
       isLoading: true,
-      indexImage: 0,
+      indexImage: -1,
       page: 1
     };
   }
 
   fetchQuery() {
     apolloClient
-      .query({ query, variables: { page: this.state.page } })
+      .query({ query, variables: { page: 1 } })
       .then(response => {
         const { loading, data } = response;
         this.setState({
           movies: [...this.state.movies, ...data.nowPlaying],
           isLoading: loading,
-          indexImage: 0
+          indexImage: 0,
+          page: 1
         });
       })
       .catch(err => {
@@ -62,9 +64,20 @@ class MovieScreen extends Component {
     this.fetchQuery();
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (
+      // this.state.movies.length !== nextState.movies.length ||
+      this.state.indexImage !== nextState.indexImage
+    ) {
+      return true;
+    }
+    return false;
+  }
+
   render() {
     const { navigation } = this.props;
     const { width } = Dimensions.get("window");
+
     return (
       <View style={{ flex: 1 }}>
         {this.state.isLoading ? (
@@ -123,10 +136,17 @@ class MovieScreen extends Component {
                   this._carousel = c;
                 }}
                 style={{ flex: 1 }}
-                data={this.state.movies}
-                renderItem={MovieCard}
+                data={this.state.movies.slice(0, this.state.indexImage + 3)}
+                renderItem={({ item }) => (
+                  <MovieCard
+                    item={item}
+                    poster={`https://image.tmdb.org/t/p/w200${item.poster_path}`}
+                  />
+                )}
                 sliderWidth={width}
                 itemWidth={width - 80}
+                // onEndReached={() => console.log("END")}
+                removeClippedSubviews={true}
                 snapOnAndroid={true}
                 onSnapToItem={index => {
                   this.setState({
