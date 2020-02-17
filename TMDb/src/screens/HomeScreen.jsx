@@ -1,21 +1,36 @@
 import React, { Component } from "react";
-import { View, Text, Button } from "react-native";
+import { View, StatusBar } from "react-native";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import Constants from "expo-constants";
+
+import Header from "../components/Header";
+import MyMovieScreen from "./MyMovieScreen";
+import MyTvScreen from "./MyTvScreen";
+import AddButton from "../components/AddButton";
+
+const Tab = createMaterialTopTabNavigator();
 
 class HomeScreen extends Component {
   render() {
-    const { navigation } = this.props;
     return (
-      <View
-        style={{
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "center"
-        }}
-      >
-        <Text>Home Screen</Text>
-        <Button title="Open Drawer" onPress={navigation.openDrawer}>
-          <Text>Open Drawer</Text>
-        </Button>
+      <View style={{ flex: 1, marginTop: Constants.statusBarHeight }}>
+        <StatusBar barStyle="dark-content" />
+        <Header></Header>
+        <View style={{ flex: 0.9 }}>
+          <Tab.Navigator swipeEnabled={false}>
+            <Tab.Screen
+              name="MyMovies"
+              options={{ tabBarLabel: "My Movies" }}
+              component={MyMovieScreen}
+            />
+            <Tab.Screen
+              name="MyTv"
+              options={{ tabBarLabel: "My Tv" }}
+              component={MyTvScreen}
+            />
+          </Tab.Navigator>
+        </View>
+        <AddButton></AddButton>
       </View>
     );
   }

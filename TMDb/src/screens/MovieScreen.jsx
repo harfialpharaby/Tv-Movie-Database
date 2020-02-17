@@ -4,7 +4,7 @@ import {
   Text,
   Dimensions,
   Image,
-  TouchableWithoutFeedback,
+  TouchableOpacity,
   ActivityIndicator
 } from "react-native";
 import Constants from "expo-constants";
@@ -65,13 +65,7 @@ class MovieScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (
-      // this.state.movies.length !== nextState.movies.length ||
-      this.state.indexImage !== nextState.indexImage
-    ) {
-      return true;
-    }
-    return false;
+    return this.state.indexImage !== nextState.indexImage;
   }
 
   render() {
@@ -105,20 +99,21 @@ class MovieScreen extends Component {
                 position: "absolute",
                 width: 60,
                 top: Constants.statusBarHeight * 2,
+                right: 0,
                 backgroundColor: "white"
               }}
             >
-              <TouchableWithoutFeedback onPress={navigation.openDrawer}>
+              <TouchableOpacity onPress={navigation.openDrawer}>
                 <Image
                   source={require("../../assets/drawer.png")}
                   style={{
                     height: 30,
                     width: 30,
-                    alignSelf: "flex-end",
+                    alignSelf: "flex-start",
                     tintColor: "black"
                   }}
                 />
-              </TouchableWithoutFeedback>
+              </TouchableOpacity>
             </View>
             <View
               style={{

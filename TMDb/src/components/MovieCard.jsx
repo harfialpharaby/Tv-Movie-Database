@@ -29,25 +29,24 @@ export default class MovieCard extends Component {
           style={{ flex: 0.3, height: 135 }}
           resizeMethod="scale"
         >
-          <View style={{ flex: 1 }}>
-            <View
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: 40,
-                height: 50,
-                opacity: 0.8,
-                justifyContent: "center",
-                alignItems: "center",
-                borderBottomRightRadius: 15,
-                backgroundColor: "black"
-              }}
-            >
-              <TouchableOpacity onPress={() => console.log(item.id)}>
-                <Entypo name="plus" size={30} color="white"></Entypo>
-              </TouchableOpacity>
-            </View>
+          <View
+            style={{
+              flex: 1,
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: 40,
+              height: 50,
+              opacity: 0.8,
+              justifyContent: "center",
+              alignItems: "center",
+              borderBottomRightRadius: 15,
+              backgroundColor: "black"
+            }}
+          >
+            <TouchableOpacity onPress={() => console.log(item.id)}>
+              <Entypo name="plus" size={30} color="white"></Entypo>
+            </TouchableOpacity>
           </View>
         </ImageBackground>
         <View style={{ flex: 0.7 }}>

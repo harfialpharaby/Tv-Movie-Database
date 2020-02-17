@@ -2,37 +2,21 @@ import * as React from "react";
 import { StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createStackNavigator } from "@react-navigation/stack";
 import { ApolloProvider } from "@apollo/react-hooks";
 
 import apolloClient from "./src/config/graphql";
-import HomeScreen from "./src/screens/HomeScreen";
-import MovieScreen from "./src/screens/MovieScreen";
-import TvScreen from "./src/screens/TvScreen";
+import RootNavigation from "./src/navigations/RootNavigation";
 
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <ApolloProvider client={apolloClient}>
       <NavigationContainer>
         <StatusBar barStyle="default" />
-        <Drawer.Navigator>
-          <Drawer.Screen
-            name="HomeScreen"
-            component={HomeScreen}
-            options={{ drawerLabel: "Home" }}
-          />
-          <Drawer.Screen
-            name="Movie"
-            component={MovieScreen}
-            options={{ drawerLabel: "Explore" }}
-          />
-          <Drawer.Screen
-            name="Tv"
-            component={TvScreen}
-            options={{ drawerLabel: "TV" }}
-          />
-        </Drawer.Navigator>
+        <RootNavigation></RootNavigation>
       </NavigationContainer>
     </ApolloProvider>
   );
