@@ -1,12 +1,5 @@
 import React, { Component } from "react";
-import {
-  View,
-  Text,
-  Dimensions,
-  Image,
-  TouchableOpacity,
-  ActivityIndicator
-} from "react-native";
+import { View, Dimensions, Image, TouchableOpacity } from "react-native";
 import Constants from "expo-constants";
 import Carousel from "react-native-snap-carousel";
 import { gql } from "apollo-boost";
@@ -14,6 +7,7 @@ import { gql } from "apollo-boost";
 import apolloClient from "../config/graphql";
 import MovieCard from "../components/MovieCard";
 import PosterImage from "../components/PosterImage";
+import LoadingIndicator from "../components/LoadingIndicator";
 
 const query = gql`
   query getPopularMoviesOnPage($page: Int) {
@@ -75,20 +69,7 @@ class MovieScreen extends Component {
     return (
       <View style={{ flex: 1 }}>
         {this.state.isLoading ? (
-          <View style={{ flex: 1, justifyContent: "center" }}>
-            <ActivityIndicator size="large" color="blue" />
-            <Text
-              style={{
-                textAlign: "center",
-                fontSize: 20,
-                marginTop: 10,
-                letterSpacing: 5,
-                textTransform: "uppercase"
-              }}
-            >
-              Loading...
-            </Text>
-          </View>
+          <LoadingIndicator></LoadingIndicator>
         ) : (
           <View style={{ flex: 1 }}>
             <PosterImage

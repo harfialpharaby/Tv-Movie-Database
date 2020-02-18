@@ -8,13 +8,13 @@ module.exports = {
         type: Sequelize.UUID
       },
       title: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       overview: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       posterPath: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       popularity: {
         type: Sequelize.DOUBLE

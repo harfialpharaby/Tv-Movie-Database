@@ -30,12 +30,14 @@ export default function Detail(props) {
       source={{ uri: item.posterPath }}
       style={{
         flex: 1,
-        // marginTop: Constants.statusBarHeight,
         width,
         justifyContent: "flex-end"
       }}
+      imageStyle={{
+        bottom: 200
+      }}
     >
-      <StatusBar barStyle="default"></StatusBar>
+      <StatusBar translucent={true} barStyle="default"></StatusBar>
       {navigation.canGoBack() ? (
         <View
           style={{
@@ -109,8 +111,7 @@ export default function Detail(props) {
           <Text style={{ fontWeight: "bold", marginVertical: 10 }}>
             Overview
           </Text>
-          <Text>{item.overview}</Text>
-          {/* <Text>{JSON.stringify(item)}</Text> */}
+          <Text style={{ letterSpacing: 1 }}>{item.overview}</Text>
         </ScrollView>
       </View>
     </ImageBackground>

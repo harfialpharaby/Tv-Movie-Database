@@ -14,7 +14,7 @@ class HomeScreen extends Component {
   render() {
     return (
       <View style={{ flex: 1, marginTop: Constants.statusBarHeight }}>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar translucent={true} barStyle="dark-content" />
         <Header></Header>
         <View style={{ flex: 0.9 }}>
           <Tab.Navigator swipeEnabled={false}>

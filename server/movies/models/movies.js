@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         field: "id"
       },
       title: { type: DataTypes.STRING },
-      overview: { type: DataTypes.STRING },
+      overview: { type: DataTypes.STRING(1000) },
       posterPath: { type: DataTypes.STRING },
       popularity: { type: DataTypes.DOUBLE },
       tags: { type: DataTypes.ARRAY(DataTypes.STRING) }
