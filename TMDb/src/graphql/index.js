@@ -75,3 +75,45 @@ export const ADD_TV = gql`
     }
   }
 `;
+
+export const DEL_MOVIE = gql`
+  mutation inputDeletion($_id: String) {
+    deleteMovie(_id: $_id) {
+      status
+    }
+  }
+`;
+
+export const DEL_TV = gql`
+  mutation inputDeletion($_id: String) {
+    deleteTv(_id: $_id) {
+      status
+    }
+  }
+`;
+
+export const UPDATE_MOVIE = gql`
+  mutation($_id: String, $title: String, $overview: String, $tags: [String]) {
+    updateMovie(_id: $_id, title: $title, overview: $overview, tags: $tags) {
+      _id
+      title
+      overview
+      posterPath
+      popularity
+      tags
+    }
+  }
+`;
+
+export const UPDATE_TV = gql`
+  mutation($_id: String, $title: String, $overview: String, $tags: [String]) {
+    updateTv(_id: $_id, title: $title, overview: $overview, tags: $tags) {
+      _id
+      title
+      overview
+      posterPath
+      popularity
+      tags
+    }
+  }
+`;

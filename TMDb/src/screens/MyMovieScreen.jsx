@@ -1,39 +1,31 @@
 import React, { Component } from "react";
 import { View, FlatList } from "react-native";
+import { useQuery } from "@apollo/react-hooks";
 
-import apolloClient from "../config/graphql";
+import { GET_MOVIES } from "../graphql";
 import LoadingIndicator from "../components/LoadingIndicator";
 import ListCard from "../components/ListCard";
-import { GET_MOVIES } from "../graphql";
+import NothingAdded from "../components/NothingAdded";
 
-export default class MyMovieScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoading: true,
-      movies: []
-    };
+export default function(props) {
+  const { called, loading, data } = useQuery(GET_MOVIES);
+  if (loading) {
+    return <LoadingIndicator></LoadingIndicator>;
   }
+  return <MyMovieScreen {...props} movies={data.movies} />;
+}
 
-  async fetchQuery() {
-    const { loading, data } = await apolloClient.query({ query: GET_MOVIES });
-    this.setState({
-      movies: [...this.state.movies, ...data.movies],
-      isLoading: loading
-    });
-  }
-
-  componentDidMount() {
-    this.fetchQuery();
-  }
-
+class MyMovieScreen extends Component {
   render() {
-    return this.state.isLoading ? (
+    const { loading, movies } = this.props;
+    return loading ? (
       <LoadingIndicator></LoadingIndicator>
+    ) : !movies.length ? (
+      <NothingAdded></NothingAdded>
     ) : (
       <View style={{ flex: 1 }}>
         <FlatList
-          data={this.state.movies}
+          data={movies}
           renderItem={({ item }) => <ListCard item={item} />}
           keyExtractor={item => item._id}
         />

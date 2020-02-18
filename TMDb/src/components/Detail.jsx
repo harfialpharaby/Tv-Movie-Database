@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,28 +6,20 @@ import {
   TouchableOpacity,
   StatusBar,
   Dimensions,
-  ScrollView,
-  Button
+  ScrollView
 } from "react-native";
-import MaskedView from "@react-native-community/masked-view";
 import { useNavigation } from "@react-navigation/native";
-import {
-  Feather,
-  Entypo,
-  EvilIcons,
-  FontAwesome,
-  MaterialCommunityIcons
-} from "@expo/vector-icons";
+import { Feather, EvilIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import Constants from "expo-constants";
 
 export default function Detail(props) {
   const { item } = props.route.params;
   const navigation = useNavigation();
-  const { width, height } = Dimensions.get("window");
+  const { width } = Dimensions.get("window");
 
   return (
     <ImageBackground
-      source={{ uri: item.posterPath }}
+      source={{ uri: `https://image.tmdb.org/t/p/original${item.posterPath}` }}
       style={{
         flex: 1,
         width,
@@ -39,29 +31,33 @@ export default function Detail(props) {
     >
       <StatusBar translucent={true} barStyle="default"></StatusBar>
       {navigation.canGoBack() ? (
-        <View
+        <TouchableOpacity
+          onPress={navigation.goBack}
           style={{
             position: "absolute",
             left: 20,
-            top: Constants.statusBarHeight * 2,
-            padding: 10,
-            borderRadius: 50,
-            backgroundColor: "white",
-            shadowColor: "#000",
-            shadowOffset: {
-              width: 0,
-              height: 2
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5,
-            zIndex: 1
+            top: Constants.statusBarHeight * 2
           }}
         >
-          <TouchableOpacity onPress={navigation.goBack}>
+          <View
+            style={{
+              padding: 10,
+              borderRadius: 50,
+              backgroundColor: "white",
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 5,
+              zIndex: 1
+            }}
+          >
             <Feather name="arrow-left" size={32} color="black" />
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
       ) : null}
       <TouchableOpacity
         style={{
@@ -78,6 +74,7 @@ export default function Detail(props) {
           backgroundColor: "#4BC7FD",
           borderRadius: 50
         }}
+        onPress={() => navigation.navigate("Edit", { item })}
       >
         <MaterialCommunityIcons name="pencil" size={25} color="black" />
       </TouchableOpacity>
@@ -94,7 +91,13 @@ export default function Detail(props) {
           showsVerticalScrollIndicator={false}
         >
           <Text style={{ fontSize: 30 }}>{item.title}</Text>
-          <Text style={{ textTransform: "capitalize", marginVertical: 5 }}>
+          <Text
+            style={{
+              textTransform: "capitalize",
+              marginVertical: 5,
+              color: "grey"
+            }}
+          >
             {item.tags.join(" | ")}
           </Text>
           <View style={{ flexDirection: "row" }}>

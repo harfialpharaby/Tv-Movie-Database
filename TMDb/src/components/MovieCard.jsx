@@ -1,14 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  ImageBackground,
-  TouchableOpacity,
-  Picker,
-  TouchableHighlight,
-  Modal,
-  Alert
-} from "react-native";
+import { View, Text, ImageBackground, TouchableOpacity } from "react-native";
 import { EvilIcons, Feather, Entypo } from "@expo/vector-icons";
 
 import AddModal from "./AddModal";

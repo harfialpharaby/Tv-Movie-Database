@@ -1,39 +1,31 @@
 import React, { Component } from "react";
 import { View, FlatList } from "react-native";
+import { useQuery } from "@apollo/react-hooks";
 
-import apolloClient from "../config/graphql";
+import { GET_TV } from "../graphql";
 import ListCard from "../components/ListCard";
 import LoadingIndicator from "../components/LoadingIndicator";
-import { GET_TV } from "../graphql";
+import NothingAdded from "../components/NothingAdded";
 
-export default class MyTvScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoading: true,
-      tvAll: []
-    };
+export default function(props) {
+  const { called, loading, data } = useQuery(GET_TV);
+  if (loading) {
+    return <LoadingIndicator></LoadingIndicator>;
   }
+  return <MyTvScreen {...props} tvAll={data.tvAll} />;
+}
 
-  async fetchQuery() {
-    const { loading, data } = await apolloClient.query({ query: GET_TV });
-    this.setState({
-      tvAll: [...this.state.tvAll, ...data.tvAll],
-      isLoading: loading
-    });
-  }
-
-  componentDidMount() {
-    this.fetchQuery();
-  }
-
+class MyTvScreen extends Component {
   render() {
-    return this.state.isLoading ? (
+    const { loading, tvAll } = this.props;
+    return loading ? (
       <LoadingIndicator></LoadingIndicator>
+    ) : !tvAll.length ? (
+      <NothingAdded></NothingAdded>
     ) : (
       <View style={{ flex: 1 }}>
         <FlatList
-          data={this.state.tvAll}
+          data={tvAll}
           renderItem={({ item }) => <ListCard item={item} />}
           keyExtractor={item => item._id}
         />

@@ -1,15 +1,13 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { View, TouchableOpacity, Text } from "react-native";
-import Constants from "expo-constants";
-import { Feather } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
 
 import HomeScreen from "../screens/HomeScreen";
 import Detail from "../components/Detail";
+import EditScreen from "../screens/EditScreen";
 
-export default function RootNavigation(props) {
+export default function HomeNavigation(props) {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen
@@ -18,6 +16,7 @@ export default function RootNavigation(props) {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="Detail" component={Detail} />
+      <Stack.Screen name="Edit" component={EditScreen} />
     </Stack.Navigator>
   );
 }
