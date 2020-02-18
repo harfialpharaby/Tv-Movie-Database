@@ -12,9 +12,9 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: DataTypes.UUIDV4,
         field: "id"
       },
-      title: { type: DataTypes.STRING },
-      overview: { type: DataTypes.STRING(1000) },
-      posterPath: { type: DataTypes.STRING },
+      title: { type: DataTypes.TEXT },
+      overview: { type: DataTypes.TEXT },
+      posterPath: { type: DataTypes.TEXT },
       popularity: { type: DataTypes.DOUBLE },
       tags: { type: DataTypes.ARRAY(DataTypes.STRING) }
     },
