@@ -255,7 +255,8 @@ const styles = StyleSheet.create({
   },
   focusedTitle: {
     marginLeft: 30,
-    color: "green"
+    color: "green",
+    textTransform: "uppercase"
   },
   footerOnFocus: {
     textAlign: "center",
